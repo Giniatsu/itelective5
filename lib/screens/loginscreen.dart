@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:itelective5/screens/signupscreen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class Loginscreen extends StatefulWidget {
@@ -57,7 +58,7 @@ class _LoginscreenState extends State<Loginscreen> {
         Expanded(
           flex: 2,
           child: Container(
-            padding: EdgeInsets.symmetric(horizontal: 20),
+            padding: const EdgeInsets.symmetric(horizontal: 20),
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height,
             child: loginButtons(context),
@@ -118,7 +119,7 @@ class _LoginscreenState extends State<Loginscreen> {
 
   Widget buildIndicator() => AnimatedSmoothIndicator(
         effect: const ExpandingDotsEffect(
-            dotWidth: 5, dotHeight: 5, activeDotColor: Colors.blue),
+            dotWidth: 5, dotHeight: 5, activeDotColor: Colors.brown),
         activeIndex: currentIndex,
         count: images.length,
       );
@@ -203,8 +204,14 @@ class _LoginscreenState extends State<Loginscreen> {
     );
   }
 
-void _login() {}
-  void _signup() {}
+  void _login() {}
+  void _signup() {
+    Navigator.of(context).push(MaterialPageRoute(
+      builder: (context) {
+        return const Signupscreen();
+      },
+    ));
+  }
   Widget theButton(String caption, double width, Color bgcolor, Color txtcolor,
       Color bscolor, double num) {
     return Container(
