@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:itelective5/screens/homescreen.dart';
 import 'package:itelective5/screens/signupscreen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -183,7 +184,9 @@ class _LoginscreenState extends State<Loginscreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homescreen()));
+                },
                 iconSize: 40,
                 color: Colors.yellow,
                 padding: EdgeInsets.symmetric(horizontal: 15),

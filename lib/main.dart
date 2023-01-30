@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:itelective5/screens/homescreen.dart';
 import 'package:itelective5/screens/loginscreen.dart';
 
 void main() {
@@ -26,7 +27,11 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         //primarySwatch: Colors.blue,
       ),
-      home: const Loginscreen(),
+      //home: const Loginscreen(),
+      routes: {
+        '/': (context) => const Loginscreen(),
+        '/homescreen':(context) => const Homescreen(),
+      },
     );
   }
 }
