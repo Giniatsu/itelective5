@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:itelective5/screens/MyScreenManager.dart';
+import 'package:itelective5/screens/Screens.dart';
 import 'package:itelective5/screens/homescreen.dart';
 import 'package:itelective5/screens/signupscreen.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({Key? key}) : super(key: key);
@@ -13,6 +17,23 @@ class Loginscreen extends StatefulWidget {
 }
 
 class _LoginscreenState extends State<Loginscreen> {
+  Map<String, dynamic> _userData = {};
+
+  void _fetchUserData() async {
+    final response = await http.get(Uri.parse('https://randomuser.me/api/'));
+    if (response.statusCode == 200) {
+      setState(() {
+        _userData = jsonDecode(response.body)['results'][0];
+      });
+      MyScreenManager.setCurrentScreen(Screens.Home);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => Homescreen(userData: _userData)));
+    } else {
+      print('Failed to fetch user data');
+    }
+  }
+
+
   int currentIndex = 0;
   final images = [
     'assets/images/coffee-1.jpg',
@@ -184,9 +205,7 @@ class _LoginscreenState extends State<Loginscreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             IconButton(
-                onPressed: () {
-                  Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Homescreen()));
-                },
+                onPressed: _fetchUserData,
                 iconSize: 40,
                 color: Colors.yellow,
                 padding: EdgeInsets.symmetric(horizontal: 15),

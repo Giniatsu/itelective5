@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class UserCard extends StatelessWidget {
-  const UserCard({Key? key}) : super(key: key);
+class UserCard extends StatefulWidget {
+  final Map<String, dynamic> userData;
 
+  UserCard({required this.userData});
+
+  @override
+  State<UserCard> createState() => _UserCardState();
+}
+
+class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -20,16 +27,13 @@ class UserCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const CircleAvatar(
-              radius: 70,
-              backgroundColor: Color.fromARGB(255, 255, 110, 49),
-              foregroundImage: AssetImage(
-                "assets/images/myself.png",
-              ),
+            CircleAvatar(
+              radius: 50,
+              backgroundImage: NetworkImage(widget.userData['picture']['large']),
             ),
             const SizedBox(height: 15),
             Text(
-              "Russel Garcia",
+              "${widget.userData['name']['first']} ${widget.userData['name']['last']}",
               style: TextStyle(
                 fontSize: 30,
                 fontWeight: FontWeight.normal,
@@ -37,7 +41,7 @@ class UserCard extends StatelessWidget {
               ),
             ),
             Text(
-              "Web Developer",
+              "${widget.userData['login']['username']}",
               style: TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.normal,
@@ -48,31 +52,31 @@ class UserCard extends StatelessWidget {
             RichText(
               textAlign: TextAlign.center,
               text: TextSpan(
-                text: 'A student of ',
+                text: 'I am ',
                 style: TextStyle(color: Colors.white, fontSize: 15),
-                children: const <TextSpan>[
+                children: <TextSpan>[
                   TextSpan(
-                      text: 'Ateneo de Davao University',
+                      text: '${widget.userData['dob']['age']} years old',
                       style: TextStyle(color: Colors.blue)),
                   TextSpan(
-                    text: ', presently studying',
+                    text: ', presently living in',
                   ),
                   TextSpan(
-                      text: ' Information Technology.',
+                      text: ' ${widget.userData['location']['street']['number']} ${widget.userData['location']['street']['name']}, ${widget.userData['location']['city']}, ${widget.userData['location']['state']} ${widget.userData['location']['postcode']}, ${widget.userData['location']['country']}.',
                       style: TextStyle(color: Colors.blue)),
                   TextSpan(
-                    text: ' Learning',
+                    text: ' My phone number is',
                   ),
                   TextSpan(
-                      text: ' Flutter',
+                      text: ' ${widget.userData['phone']}',
                       style: TextStyle(color: Colors.cyan)),
                   TextSpan(
-                    text: ' and',
+                    text: ' and cell number is',
                   ),
                   TextSpan(
-                      text: ' React', style: TextStyle(color: Colors.cyan)),
+                      text: ' ${widget.userData['cell']}', style: TextStyle(color: Colors.cyan)),
                   TextSpan(
-                    text: ' this semester.',
+                    text: ' currently.',
                   ),
                 ],
               ),
@@ -97,7 +101,7 @@ class UserCard extends StatelessWidget {
                   color: Colors.white,
                 )),
               ),
-              child: Text("aragarcia@addu.edu.ph"),
+              child: Text("${widget.userData['email']}"),
             ),
             const SizedBox(height: 15),
             Row(

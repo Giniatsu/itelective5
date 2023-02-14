@@ -1,14 +1,55 @@
 import 'package:flutter/material.dart';
-import 'package:itelective5/usercard.dart';
+import 'package:itelective5/screens/loginscreen.dart';
+import 'package:itelective5/shared%20widget/leftdrawer.dart';
+import 'package:itelective5/shared%20widget/rightdrawer.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
+
+class Pokemon {
+  final String name;
+  final String imageUrl;
+
+  Pokemon({required this.name, required this.imageUrl});
+}
 
 class Homescreen extends StatefulWidget {
-  const Homescreen({Key? key}) : super(key: key);
+  final Map<String, dynamic> userData;
+
+  Homescreen({required this.userData});
 
   @override
   _HomescreenState createState() => _HomescreenState();
 }
 
 class _HomescreenState extends State<Homescreen> {
+  late List<Pokemon> _pokemonList;
+  @override
+  void initState() {
+    super.initState();
+    _getPokemonList();
+  }
+
+  void _getPokemonList() async {
+    final response = await http
+        .get(Uri.parse('https://pokeapi.co/api/v2/pokemon?limit=100'));
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final results = data['results'];
+
+      setState(() {
+        _pokemonList = results.map<Pokemon>((result) {
+          final name = result['name'];
+          final imageUrl =
+              'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${result['url'].split('/')[6]}.png';
+          return Pokemon(name: name, imageUrl: imageUrl);
+        }).toList();
+      });
+    } else {
+      throw Exception('Failed to load Pokemon list');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -19,127 +60,31 @@ class _HomescreenState extends State<Homescreen> {
           actions: [
             Builder(
               builder: (context) => IconButton(
-                icon: Icon(Icons.person),
+                icon: CircleAvatar(
+                  backgroundImage:
+                      NetworkImage(widget.userData['picture']['thumbnail']),
+                ),
                 onPressed: () => Scaffold.of(context).openEndDrawer(),
               ),
             )
           ],
         ),
-        endDrawer: Drawer(
-          width: MediaQuery.of(context).size.width > 600
-              ? MediaQuery.of(context).size.width * 0.3
-              : MediaQuery.of(context).size.width * 0.8,
-          child: Column(
-            children: [
-              Container(
-                margin: EdgeInsets.all(20),
-                width: MediaQuery.of(context).size.width,
-                height: 500,
-                child: UserCard(),
-              ),
-              Container(
-                padding: EdgeInsets.all(24),
-                child: Wrap(
-                  runSpacing: 16,
-                  children: [
-                    ListTile(
-                    leading: const Icon(Icons.logout),
-                    title: const Text('Logout'),
-                    onTap: () {
-                      Navigator.pushNamed(context, '/');
-                    },
-                  ),
-                  ]
-                ),
-              ),
-            ],
-          ),
-        ),
+        endDrawer: RightDrawer(userData: widget.userData),
         drawer: MediaQuery.of(context).size.width < 600
-            ? const NavigationDrawer()
+            ? NavigationDrawer(userData: widget.userData,)
             : null,
-        body: Row(
-          children: [
-            MediaQuery.of(context).size.width > 600
-                ? Flexible(flex: 1, child: NavigationDrawer())
-                : Container(),
-            Flexible(
-              flex: 3,
-              child: Center(
-                child: Image.asset(
-                  'assets/icon/icon.png',
-                  width: 500,
-                  height: 500,
-                ),
+        body: _pokemonList == null
+            ? Center(child: CircularProgressIndicator())
+            : ListView.builder(
+                itemCount: _pokemonList.length,
+                itemBuilder: (context, index) {
+                  final pokemon = _pokemonList[index];
+                  return ListTile(
+                    leading: Image.network(pokemon.imageUrl),
+                    title: Text(pokemon.name),
+                  );
+                },
               ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class NavigationDrawer extends StatefulWidget {
-  const NavigationDrawer({Key? key}) : super(key: key);
-
-  @override
-  State<NavigationDrawer> createState() => _NavigationDrawerState();
-}
-
-class _NavigationDrawerState extends State<NavigationDrawer> {
-  @override
-  Widget build(BuildContext context) {
-    return Drawer(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          buildHeader(context),
-          buildMenuItems(context),
-        ],
-      ),
-    );
-  }
-
-  Widget buildHeader(BuildContext context) {
-    return Container();
-  }
-
-  Widget buildMenuItems(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.all(24),
-      child: Wrap(
-        runSpacing: 16,
-        children: [
-          ListTile(
-            leading: const Icon(Icons.home),
-            title: const Text('Home'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.work),
-            title: const Text('Projects'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.data_thresholding_outlined),
-            title: const Text('Report'),
-            onTap: () {},
-          ),
-          SizedBox(
-            height: 100,
-          ),
-          ListTile(
-            leading: const Icon(Icons.settings),
-            title: const Text('Settings'),
-            onTap: () {},
-          ),
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: const Text('About Us'),
-            onTap: () {},
-          ),
-        ],
       ),
     );
   }
