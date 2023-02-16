@@ -4,15 +4,15 @@ import 'package:itelective5/screens/MyScreenManager.dart';
 
 import '../screens/Screens.dart';
 
-class NavigationDrawer extends StatefulWidget {
+class LeftDrawer extends StatefulWidget {
   final Map<String, dynamic> userData;
 
-  NavigationDrawer({required this.userData});
+  LeftDrawer({required this.userData});
   @override
-  State<NavigationDrawer> createState() => _NavigationDrawerState();
+  State<LeftDrawer> createState() => _LeftDrawerState();
 }
 
-class _NavigationDrawerState extends State<NavigationDrawer> {
+class _LeftDrawerState extends State<LeftDrawer> {
 
   @override
   Widget build(BuildContext context) {

@@ -28,7 +28,7 @@ class _UserCardState extends State<UserCard> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             CircleAvatar(
-              radius: 50,
+              radius: 70,
               backgroundImage: NetworkImage(widget.userData['picture']['large']),
             ),
             const SizedBox(height: 15),

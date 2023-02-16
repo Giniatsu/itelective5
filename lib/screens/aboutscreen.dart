@@ -33,12 +33,12 @@ class _AboutscreenState extends State<Aboutscreen> {
         ),
         endDrawer: RightDrawer(userData: widget.userData,),
         drawer: MediaQuery.of(context).size.width < 600
-            ? NavigationDrawer(userData: widget.userData,)
+            ? LeftDrawer(userData: widget.userData,)
             : null,
         body: Row(
           children: [
             MediaQuery.of(context).size.width > 600
-                ? Flexible(flex: 1, child: NavigationDrawer(userData: widget.userData,))
+                ? Flexible(flex: 1, child: LeftDrawer(userData: widget.userData,))
                 : Container(),
             Flexible(
               flex: 3,
