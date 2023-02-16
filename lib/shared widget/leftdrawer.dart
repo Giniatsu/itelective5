@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:itelective5/screens/aboutscreen.dart';
 import 'package:itelective5/screens/MyScreenManager.dart';
+import 'package:itelective5/screens/homescreen.dart';
 
 import '../screens/Screens.dart';
 
@@ -40,7 +41,16 @@ class _LeftDrawerState extends State<LeftDrawer> {
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
-            onTap: () {},
+            onTap: () {
+              if (MyScreenManager.getCurrentScreen() != Screens.Home) {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) =>
+                            Homescreen(userData: widget.userData)));
+                MyScreenManager.setCurrentScreen(Screens.Home);
+              }
+            },
           ),
           ListTile(
             leading: const Icon(Icons.work),

@@ -28,7 +28,7 @@ class _HomescreenState extends State<Homescreen> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Home Screen'),
+          title: Text('Pokemon Screen'),
           actions: [
             Builder(
               builder: (context) => IconButton(
@@ -43,39 +43,83 @@ class _HomescreenState extends State<Homescreen> {
         ),
         endDrawer: RightDrawer(userData: widget.userData),
         drawer: MediaQuery.of(context).size.width < 600
-            ? LeftDrawer(userData: widget.userData,)
+            ? LeftDrawer(
+                userData: widget.userData,
+              )
             : null,
         body: Row(
           children: [
             MediaQuery.of(context).size.width > 600
-                ? Flexible(flex: 1, child: LeftDrawer(userData: widget.userData))
+                ? Flexible(
+                    flex: 1, child: LeftDrawer(userData: widget.userData))
                 : Container(),
             Flexible(
               flex: 3,
-              child: Center(
-                child: FutureBuilder<List<Pokemon>>(
-                  future: _futurePokemonList,
-                  builder: (context, snapshot) {
-                    if (snapshot.hasData) {
-                      return ListView.builder(
-                        itemCount: snapshot.data!.length,
-                        itemBuilder: (context, index) {
-                          final pokemon = snapshot.data![index];
-                          return ListTile(
-                            leading: Image.network(pokemon.imageUrl),
-                            title: Text(pokemon.name),
-                            subtitle: Text(
-                                '${pokemon.types.join(', ')} • ${pokemon.weight} kg'),
+              child: LayoutBuilder(builder: (context, constraints) {
+                if (constraints.maxWidth <= 600) {
+                  return Center(
+                    child: FutureBuilder<List<Pokemon>>(
+                      future: _futurePokemonList,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return ListView.builder(
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final pokemon = snapshot.data![index];
+                              return Card(
+                                child: ListTile(
+                                  hoverColor: Colors.black,
+                                  leading: Image.network(pokemon.imageUrl),
+                                  title: Text(pokemon.name),
+                                  subtitle: Text(
+                                      '${pokemon.types.join(', ')} • ${pokemon.weight} kg'),
+                                ),
+                              );
+                            },
                           );
-                        },
-                      );
-                    } else if (snapshot.hasError) {
-                      return Text('${snapshot.error}');
-                    }
-                    return CircularProgressIndicator();
-                  },
-                ),
-              ),
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return CircularProgressIndicator();
+                      },
+                    ),
+                  );
+                } else {
+                  return Center(
+                    child: FutureBuilder<List<Pokemon>>(
+                      future: _futurePokemonList,
+                      builder: (context, snapshot) {
+                        if (snapshot.hasData) {
+                          return GridView.builder(
+                            gridDelegate:
+                                SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 4,
+                              childAspectRatio: 1.6,
+                            ),
+                            itemCount: snapshot.data!.length,
+                            itemBuilder: (context, index) {
+                              final pokemon = snapshot.data![index];
+                              return Card(
+                                child: Column(
+                                  children: [
+                                    Image.network(pokemon.imageUrl),
+                                    Text(pokemon.name),
+                                    Text(
+                                        '${pokemon.types.join(', ')} • ${pokemon.weight} kg'),
+                                  ],
+                                ),
+                              );
+                            },
+                          );
+                        } else if (snapshot.hasError) {
+                          return Text('${snapshot.error}');
+                        }
+                        return CircularProgressIndicator();
+                      },
+                    ),
+                  );
+                }
+              }),
             ),
           ],
         ),

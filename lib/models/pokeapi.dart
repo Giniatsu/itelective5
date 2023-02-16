@@ -7,12 +7,17 @@ class PokeAPI {
 
   static Future<List<Pokemon>> fetchPokemonList() async {
     final response = await http.get(Uri.parse('$baseUrl/pokemon?limit=100'));
+    // print(response.body);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
+      //print(data);
       final results = data['results'] as List<dynamic>;
+      //print(results);
       final pokemonList = <Pokemon>[];
+      //print(pokemonList);
       for (final result in results) {
         final pokemonResponse = await http.get(Uri.parse(result['url']));
+        //print(pokemonResponse.body);
         if (pokemonResponse.statusCode == 200) {
           final pokemonData = jsonDecode(pokemonResponse.body);
           final types = (pokemonData['types'] as List<dynamic>)
