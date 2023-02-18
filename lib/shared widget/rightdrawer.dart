@@ -12,10 +12,6 @@ class RightDrawer extends StatefulWidget {
 }
 
 class _RightDrawerState extends State<RightDrawer> {
-  void _clearUserData() {
-    Navigator.pushAndRemoveUntil(context,
-        MaterialPageRoute(builder: (context) => Loginscreen()), (route) => false);
-  }
   @override
   Widget build(BuildContext context) {
     return Drawer(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'dart:math';
 
 class UserCard extends StatefulWidget {
   final Map<String, dynamic> userData;
@@ -13,13 +14,35 @@ class UserCard extends StatefulWidget {
 class _UserCardState extends State<UserCard> {
   @override
   Widget build(BuildContext context) {
+    final _random = Random();
+// Generate a random color for the gradient
+    final color1 = Color.fromRGBO(
+      _random.nextInt(256),
+      _random.nextInt(256),
+      _random.nextInt(256),
+      1.0,
+    );
+    final color2 = Color.fromRGBO(
+      _random.nextInt(256),
+      _random.nextInt(256),
+      _random.nextInt(256),
+      1.0,
+    );
+
     return Card(
-      color: Color.fromARGB(255, 35, 55, 99),
       elevation: 50,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(40.0),
       ),
       child: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            colors: [color1 , color2],
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+          ),
+          borderRadius: BorderRadius.circular(40.0),
+        ),
         padding: EdgeInsets.symmetric(horizontal: 20),
         width: MediaQuery.of(context).size.width * .5,
         height: 500,
@@ -112,42 +135,42 @@ class _UserCardState extends State<UserCard> {
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     icon: FaIcon(
                       FontAwesomeIcons.facebook,
-                      color: Color.fromARGB(255, 173, 142, 112),
+                      color: color1,
                     )),
                 IconButton(
                     onPressed: () {},
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     icon: FaIcon(
                       FontAwesomeIcons.instagram,
-                      color: Color.fromARGB(255, 173, 142, 112),
+                      color: color1,
                     )),
                 IconButton(
                     onPressed: () {},
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     icon: FaIcon(
                       FontAwesomeIcons.twitter,
-                      color: Color.fromARGB(255, 173, 142, 112),
+                      color: color1,
                     )),
                 IconButton(
                     onPressed: () {},
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     icon: FaIcon(
                       FontAwesomeIcons.discord,
-                      color: Color.fromARGB(255, 173, 142, 112),
+                      color: color1,
                     )),
                 IconButton(
                     onPressed: () {},
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     icon: FaIcon(
                       FontAwesomeIcons.linkedin,
-                      color: Color.fromARGB(255, 173, 142, 112),
+                      color: color1,
                     )),
                 IconButton(
                     onPressed: () {},
                     padding: EdgeInsets.symmetric(horizontal: 5),
                     icon: FaIcon(
                       FontAwesomeIcons.dev,
-                      color: Color.fromARGB(255, 173, 142, 112),
+                      color: color1,
                     )),
               ],
             ),
